@@ -33,17 +33,17 @@ public class MarketPriceDataController {
     private MarketPriceService marketPriceService;
     
 
-    @Scheduled(fixedDelay = 12000000)
+    @Scheduled(fixedDelay = 5400000)
     @RequestMapping(value = "/rateSave", method = RequestMethod.GET)
     public void rateSave() {
         
         try {
             
-            String apiURL;          
+            String apiURL = "";          
             String command = "";
             
             //apiURL = "https://www.worldcoinindex.com/apiservice/json?key=TSd9QUg1uE9PRE3JSFP88IWvJ";
-            apiURL = "https://www.worldcoinindex.com/apiservice/json?key=1111 ";
+            apiURL = "https://www.worldcoinindex.com/apiservice/json?key=3GJ2UwUK92ikwWvZOZ0xtKXlA";
             
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -99,8 +99,9 @@ public class MarketPriceDataController {
                     BigDecimal volume_24h_out = volume_24h.divide(ex, 6, BigDecimal.ROUND_DOWN);
                     
                     MarketPriceSave marketPrice = new MarketPriceSave();
+                    
                     marketPrice.setLabel((String) marketsObject.get("Label"));
-                    marketPrice.setName((String) marketsObject.get("Name"));;
+                    marketPrice.setName((String) marketsObject.get("Name"));
                     marketPrice.setPrice_btc_result(price_btc_out);
                     marketPrice.setPrice_usd_result(price_usd_out);
                     marketPrice.setPrice_cny_result(price_cny_out);
@@ -108,7 +109,7 @@ public class MarketPriceDataController {
                     marketPrice.setPrice_gbp_result(price_gbp_out);
                     marketPrice.setPrice_rur_result(price_rur_out);
                     marketPrice.setVolume_24h_result(volume_24h_out);
-                    marketPrice.setTimestamp((Long) marketsObject.get("Timestamp"));;
+                    marketPrice.setTimestamp((Long) marketsObject.get("Timestamp"));
                     
                     marketPriceService.rateSave(marketPrice);
                 }
@@ -122,8 +123,8 @@ public class MarketPriceDataController {
         }
         
     }
-    
 
+    
 	//db에서 받아온 데이터 중 원하는 속성만 추려서 JSON 객체화 한다.
 	@RequestMapping(value = "/chartData", method = RequestMethod.GET)
 	public JSONArray chart(@RequestParam("money_type") String money_type, HttpServletResponse response) throws Exception {
@@ -168,17 +169,11 @@ public class MarketPriceDataController {
 				
 			}
 					
-			//bigDecimal로 형변환하기 위해서는 String으로 먼저 형변환해야한다.
-			//timestamp는 원래 String 타입이므로 바로 BigDecimal 적용
-			//api script에서 ms단위 까지 입력해야 정상 작동한다. 
-			//db저장은 s단위 까지 저장했으므로 ms단위로 변형하기 위해 000을 덧붙여준다.
 			BigDecimal bigTimestamp = new BigDecimal(timestamp + "000");
 			BigDecimal bigPerPrice = new BigDecimal(perPrice); 	
-			
-			//배열에 삽입한다.	//객체에 담으면 API가 인식하지 못 한다.
+
 			BigDecimal[] bigDecimalArray = {bigTimestamp, bigPerPrice};
-			
-			//Array 타입을 jsonArray에 추가한다.
+
 			jsonArray.add(bigDecimalArray);
 			
 		}
@@ -189,10 +184,10 @@ public class MarketPriceDataController {
 	
 	// 비트코인 화폐 환율
 	@RequestMapping(value = "/bitrate", method = RequestMethod.GET)
-	public ArrayList<MarketPriceOutPut> bitCoinRate(@RequestParam("money_type") String money_type, HttpServletResponse response) throws Exception {
-		
-		List<MarketPrice> bitCoinList = marketPriceService.coinRateList();
-		
+	public ArrayList<MarketPriceOutPut> bitCoinRate(@RequestParam("money_type") String money_type, @RequestParam("sorting_type") String sorting_type, HttpServletResponse response) throws Exception {
+
+		List<MarketPrice> bitCoinList = marketPriceService.coinRateList(sorting_type, money_type);
+
 		ArrayList<MarketPriceOutPut> marketPriceList = new ArrayList<MarketPriceOutPut>();
 		
 		for(int i=0; i<bitCoinList.size(); i++){
@@ -216,7 +211,14 @@ public class MarketPriceDataController {
 			BigDecimal volume_24h_out = volume_24h.divide(ex, 6, BigDecimal.ROUND_DOWN);
 
 			MarketPriceOutPut marketPrice = new MarketPriceOutPut();
-			marketPrice.setLabel(bitCoinList.get(i).getLabel());
+			
+			// 라벨의 "/BTC"를 제거하는 코드 
+			String beforeLabel = bitCoinList.get(i).getLabel();
+			String removeString = "/BTC";
+			int removeStringNum = beforeLabel.indexOf(removeString);
+			String afterLabel = beforeLabel.substring(0, (beforeLabel.substring(removeStringNum).indexOf("/")+removeStringNum));
+
+			marketPrice.setLabel(afterLabel);
 			marketPrice.setName(bitCoinList.get(i).getName());;
 			
 			if (money_type.equals("PRICE_BTC")) {
@@ -248,13 +250,13 @@ public class MarketPriceDataController {
 				System.out.println("입력한 값이 없습니다.");
 						
 			}
-
+			
 			marketPrice.setVolume_24h(volume_24h_out);
 			
 			marketPriceList.add(marketPrice);
-	
+
 			}
-		
+			
 			return marketPriceList;
 
 }
@@ -270,7 +272,8 @@ public class MarketPriceDataController {
             String command = "";
             String[] names = {"USDKRW", "JPYKRW", "EURKRW", "CNYKRW", "RUBKRW", "GBPKRW", "BTCKRW"};
             for(int i = 0; i<names.length; i++){
-            apiURL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22"+ names[i] +"%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+            apiURL = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%3D%22"+ names[i] +
+            		"%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
             
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -321,6 +324,70 @@ public class MarketPriceDataController {
             }     
 
         return rateList;
+		
+	}
+	
+	@RequestMapping(value = "oneChart", method = RequestMethod.GET)
+	public JSONArray selectChart(@RequestParam("coin_type") String coin_type, @RequestParam("money_type") String money_type, HttpServletResponse response) throws Exception{
+		
+		OneChart oneChart = new OneChart();
+		oneChart.setCoin_type(coin_type);
+		oneChart.setMoney_type(money_type);
+		
+		List<MarketPrice> selectOneChart =  marketPriceService.oneChart(oneChart);
+		JSONArray ChartArray = new JSONArray();
+
+		String timestamp;
+		String perPrice = null;
+		
+		
+		for(int i = 0 ; i < selectOneChart.size() ; i++){
+			
+			MarketPrice marketPrice = new MarketPrice();
+			timestamp = selectOneChart.get(i).getTimestamp();
+			
+			if(money_type.equals("PRICE_BTC")) {
+
+				marketPrice.setPrice_btc(selectOneChart.get(i).getPrice_btc());
+				perPrice = marketPrice.getPrice_btc();
+				
+			} else if(money_type.equals("PRICE_USD")) {
+				
+				marketPrice.setPrice_usd(selectOneChart.get(i).getPrice_usd());
+				perPrice = marketPrice.getPrice_usd();
+				
+			} else if(money_type.equals("PRICE_CNY")) {
+				
+				marketPrice.setPrice_cny(selectOneChart.get(i).getPrice_cny());
+				perPrice = marketPrice.getPrice_cny();
+				
+			} else if(money_type.equals("PRICE_EUR")) {
+
+				marketPrice.setPrice_eur(selectOneChart.get(i).getPrice_eur());
+				perPrice = marketPrice.getPrice_eur();
+				
+			} else if(money_type.equals("PRICE_GBP")) {
+
+				marketPrice.setPrice_gbp(selectOneChart.get(i).getPrice_gbp());
+				perPrice = marketPrice.getPrice_gbp();
+
+			} else if(money_type.equals("PRICE_RUR")) {
+
+				marketPrice.setPrice_rur(selectOneChart.get(i).getPrice_rur());
+				perPrice = marketPrice.getPrice_rur();
+				
+			}
+			
+			BigDecimal bigTimestamp = new BigDecimal(timestamp + "000");
+			BigDecimal bigPerPrice = new BigDecimal(perPrice); 	
+
+			BigDecimal[] bigDecimalArray = {bigTimestamp, bigPerPrice};
+
+			ChartArray.add(bigDecimalArray);
+			
+		}
+		
+		return ChartArray;
 		
 	}
 	

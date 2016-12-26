@@ -4,10 +4,58 @@
 body, .container-fluid {
 	
 	background: #333;
-	margin: 0;
+	margin-top: 68px;
 	padding: 0;
 	
 }
+
+div#chart_info_title {
+	
+	margin: 0;
+	background-color: #181b1d;
+	height: 30px;
+	color: #555;
+	
+}
+
+
+div#chart_info {
+	
+	background-color: #181b1d;
+	height: 50px;
+	
+}
+
+#price_info {
+	
+	margin-top: -20px;
+	padding-left: 40px;
+	height: 56px;	
+	/* width: 240px; */
+	color: #33bbcc;
+	font-size: 60px;
+	display: inline-block;
+	
+}
+
+#money_type_info, #coin_type_info {
+	
+	height: 56ox;
+	color: #ddd;
+	size: 50px;
+	font-size: 30px;
+	display: inline-block;
+	
+}
+
+#money_type_info, #coin_type_info {
+	
+	margin-left: 20px;
+	color: #EEE;
+	font-size: 30px;
+	
+}
+
 
 /* 글자는 흰색으로 출력 */
 h3 {
@@ -16,14 +64,23 @@ h3 {
 
 #mainNav {
 
-	background: #161a1c;
+	background: #101416;
 	margin: 0;
-	height: 70px;
+	height: 65px;
 	
 }
 
+#chart_info_title {
+	
+	padding-left: 40px; 
+	font-size: 20px;
+	
+}
+
+
 /*** 시세그래프 ***/
 /* 그래프차트 공백 제거 */
+
 #market_price_graph, h3.text-center  {
 	
 	margin: 0;
@@ -33,8 +90,8 @@ h3 {
 
 #chart {
 	
-	min-height: 900px;
 	position: relative;
+	min-height: 820px; 
 	
 }
 
@@ -44,7 +101,7 @@ h3 {
 #title_bar {
 	
 	padding: 15px;
-	background: #282b2d;
+	background: #202426;
 	
 }
 
@@ -57,50 +114,43 @@ h3 {
 }
 
 
-/* 탭 버튼 */
-/* .nav-tabs>li.active>a .nav-tabs>li.hover>a {
-	
-	padding: 0;
-	color: #FFF; 
-	cursor: default;
-	background-color: #3e4244;
-	border: none;
-	border-top: 5px solid #eee;
-} */
-
 ul.nav-tabs>li>a {
 	
 	color: #ddd;
 	border: none;
 	border-top: 3px solid #2e3234;
 	border-radius: 0;
+	height: 45px;
+	font-size: 14px;
 	
 }
 
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+ul.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
 	
 	color: #FFF; 
 	cursor: default;
-	background-color: #2e3234;
+	background-color: #262a2c;
 	border: none;
 	border-top: 3px solid #33AADD;
+	transition: all 0.2s ease;
 	
 }
 
 /* focus, hover시 css */
-.nav-tabs>li>a:hover{
+ul.nav-tabs>li>a:hover{
 	
 	color: #FFF; 
 	background-color: #3e4244;
 	border: none;
 	border-top: 3px solid #eee;
+	transition: all 0.3s ease;
 	
 }
 
 /* 버튼과 리스트 구분선 */
 ul.nav.nav-tabs {
 	
-	background: #282b2d;
+	background: #202426;
 	border-bottom: 1px ;
 	
 }
@@ -110,6 +160,7 @@ ul.nav.nav-tabs {
 /* 시세리스트 배경  */
 #market_price_list {
 	
+	max-height: 900px;
 	margin: 0;
 	border: 1px solid #262a2c;
 	padding: 0;
@@ -119,24 +170,99 @@ ul.nav.nav-tabs {
 	scrollbar-track-color: #2a2a2a;
 	scrollbar-arrow-color: #2a2a2a;
 	scrollbar-face-color: #333333;
-	overflow-y:auto; overflow-x:hidden;
 	
 }
 
-#combo-box {
+thead > tr.label_bar {
+	
+	background-color: #262a2c;
+	
+}
+
+.table>tbody>tr{
+	
+	border-top: 1px solid #262a2c;
+	
+}
+
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+	
+	color: #a6b6bc;
+	border: none;
+	/* border-bottom: 1px solid #262a2c; */
+	
+}
+
+
+.table>tbody#bitrate>tr:hover, .table>tbody#rate>tr:hover{
+	
+	background: #3e4244;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	
+}
+
+
+tr.table_row.selected > td:nth-child(1) {
+	
+	border-left: 10px solid #33bbcc;
+	transition: all 0.3s ease;
+	
+}
+
+tr.table_row.selected >td {
+	
+	background: #4e5254;
+	color: #eee;
+	transition: all 0.3s ease;
+	
+}
+
+
+#bitrate {
+	
+	max-height: 600px;
+	overflow-y: auto; overflow-x:hidden;
+	
+}
+
+/* li */
+#drop-box_moneyType, #drop-box_sortingType{
+	
+	height: 45px;
+	float: right;
+}
+
+/* combo-box */
+#combo-box_moneyType, #combo-box_sortingType {
+	
+	height: 40px;
+	background: #202426;
+	border: 1px solid #2e3234;
+	color: #ddd;
+	font-size
+	
+}
+
+#combo-box_moneyType:hover, #combo-box_sortingType:hover {
+	
+	background: #282c2e;
+	border: 1px solid #ddd;
+	color: #eee;
+	
+}
+
+#combo-box_moneyType:focus, #combo-box_sortingType:focus {
 	
 	background: #262a2c;
 	border: 1px solid #33aadd;
-	color: #ddd;
+	color: #eee;
 	
 }
 
-#drop-box {
-	
-	max-height: 43px;
-	
-}
 
+	
 /* .form-group {
 	
 	align: right;

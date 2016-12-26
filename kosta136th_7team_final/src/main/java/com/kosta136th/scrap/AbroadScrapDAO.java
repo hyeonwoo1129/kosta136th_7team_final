@@ -8,4 +8,10 @@ public interface AbroadScrapDAO {
 
 	public List<AbroadPopular> popularNews() throws Exception;
 
+	public String abrScrapCheck(AbroadScrap vo) throws Exception;
+
+	public void removeAbroadScrap(AbroadScrap vo) throws Exception;
+
+	public List<GETAbroadScrap> abrScrapList(String email) throws Exception;
+
 }

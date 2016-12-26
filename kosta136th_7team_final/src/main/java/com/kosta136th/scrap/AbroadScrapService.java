@@ -8,5 +8,8 @@ public interface AbroadScrapService {
 	List<AbroadScrap> serachNews(int pageNum) throws Exception;
 	void addAbroadScrap(AbroadScrap vo) throws Exception;
 	List<AbroadPopular> popularNews() throws Exception;
+	String abrScrapCheck(AbroadScrap vo) throws Exception;
+	void removeAbroadScrap(AbroadScrap vo) throws Exception;
+	List<GETAbroadScrap> abrScrapList(String email) throws Exception;
 
 }

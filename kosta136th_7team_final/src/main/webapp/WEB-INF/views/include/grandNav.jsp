@@ -3,9 +3,9 @@
 
 <body>
 
-	<nav id="mainNav" class="navbar navbar-default navbar-static-top navbar-default">
+	<nav id="mainNav" class="navbar navbar-default navbar-static-top navbar-fixed-top">
 	
-		<div class="container">
+		<div id="nav_container" class="container">
 		
 			<div class="navbar-header">
 			
@@ -14,19 +14,18 @@
 				</button>
 				
 				<a href="/" class="navbar-brand">
-					<img id="main_logo_image" src="../../resources/img/logo_header.png" alt="bitriver_logo" />
+					<img id="main_logo_image" src="../../resources/img/140x56_BitRiver_black.png" alt="bitriver_logo" />
 				</a>
 				
 			</div>
 			
 			<div class="collapse navbar-collapse navbar-right">
 				<ul class="nav navbar-nav">
-					<li><a href="/marketPrice">실시간 시세</a></li>
-					<li><a href="/news">최신 뉴스</a></li>
-					<li><a href="/btcInfoLand">BTC 정보광장</a></li>
-					<li><a href="/board_list">자유게시판</a></li>
-					<li><a href="#" id="signupBtn" data-toggle="modal" data-target="#signup">회원가입</a></li>
-					<li><a href="#" id="signinBtn" data-toggle="modal" data-target="#signin">로그인</a></li>
+
+					<li><a href="/marketPrice">시세</a></li>
+					<li><a href="/news">비트코인뉴스</a></li>
+					<li><a href="/sub/btcInfoLand/btcInfoLand">리버커뮤니티</a></li>
+
 				</ul>
 			</div>
 			
@@ -35,4 +34,23 @@
 		</div> <!-- ./mainNav Container -->
 	
 	</nav> <!-- ./navbar -->
+	<script>
+	$(document).ready(function(){
+		loginCheck = "${empty login}"
+		if(loginCheck == "true")
+		{
+			$('.navbar-nav').append('<li><a href="#" id="signupBtn" data-toggle="modal" data-target="#signup">회원가입</a></li>');
+			$('.navbar-nav').append('<li><a href="#" id="signinBtn" data-toggle="modal" data-target="#signin">로그인</a></li>');
+	
+		}
+		else
+		{
+			$('.navbar-nav').append('<li><a href="/myPage" id = "myPage">마이페이지</a></li>');
+			$('.navbar-nav').append('<li><a href="#" id="signoutBtn">로그아웃</a></li>');
+		}
 		
+	});
+	</script>
+
+	
+	

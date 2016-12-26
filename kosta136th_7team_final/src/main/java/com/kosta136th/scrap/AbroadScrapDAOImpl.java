@@ -28,4 +28,23 @@ public class AbroadScrapDAOImpl implements AbroadScrapDAO{
 		return session.selectList(namespace + ".searchAbroadNews");
 	}
 
+	@Override
+	public String abrScrapCheck(AbroadScrap vo) throws Exception {
+		
+		return session.selectOne(namespace + ".abrScrapCheck", vo);
+	}
+
+	@Override
+	public void removeAbroadScrap(AbroadScrap vo) throws Exception {
+		session.delete(namespace + ".removeAbroadScrap", vo);
+		
+	}
+
+	@Override
+	public List<GETAbroadScrap> abrScrapList(String email) throws Exception {
+		
+		int userNum = session.selectOne(namespace + ".getUserNum", email);
+		return session.selectList(namespace + ".getAbrScrapList", userNum);
+	}
+
 }

@@ -15,84 +15,105 @@
 </head>
 
 <body>
-
+		
 	<div class="container-fluid">
 
 		<div>
 
 			<!-- 비트코인 그래프 표시  -->
 			<div id="market_price_graph" class="col-md-8 visible">
+				
+				<div id="chart_info_title">시간별 현재시세</div>	
+				<div id="chart_info">
+					
+				</div>
 				<div id="chart"></div>
 			</div>
 
-			<!-- 비트코인 시세 테이블 -->
+			<!-- 비트코인 시세 테이블 -->			
 			<div id="market_price_list" class="col-md-4 visible tabs">	<!-- visible tabs -->
-			
+				
 				<div id="title_bar">
-					<h3 class="text-center">BitCoin MarketPrice</h3>
+					<h3 class="text-center">시세 정보 리스트</h3>
 				</div>	
 					
-					<!-- 비트코인과 실화폐 환율 탭 네비 -->
-					<ul class="nav nav-tabs">
-						
-						<li class="market_price_tab active"><a data-toggle="tab" href="#bitcoin_price">BitCoin</a></li>
-												
-						<!-- 비트코인 환율 -->
-						<li class="market_price_tab"><a data-toggle="tab" href="#market_price">MarketPrice</a></li>
-						
-						<!-- 실화폐 환율 -->							
-						<li id="drop-box">
-							<!-- dropdown은 목록 선택시 뷰에 보여지는 목록이 변하지 않아 직관적이지 못함 따라서 select로 변경함 -->
-		                    <select id="combo-box" class="input-large form-control">
-			                    <option id="PRICE_BTC" value="PRICE_BTC" selected="selected"> BTC </option>
-			                    <option id="PRICE_USD" value="PRICE_USD"> USD </option>
-			                    <option id="PRICE_CNY" value="PRICE_CNY"> CNY </option>
-			                    <option id="PRICE_EUR" value="PRICE_EUR"> EUR </option>
-			                    <option id="PRICE_GBP" value="PRICE_GBP"> GBP </option>
-			                    <option id="PRICE_RUR" value="PRICE_RUR"> RUR </option>
-		                	</select>
-						</li>
-						
-					</ul>
-
+				<!-- 비트코인과 실화폐 환율 탭 네비 -->
+				<ul class="nav nav-tabs">
+					
+					<li class="market_price_tab active"><a data-toggle="tab" href="#bitcoin_price">비트코인</a></li>
+											
+					<!-- 비트코인 환율 -->
+					<li class="market_price_tab"><a data-toggle="tab" href="#market_price">실화폐</a></li>
+					
+	
+					<li id="drop-box_sortingType">
+						<!-- dropdown은 목록 선택시 뷰에 보여지는 목록이 변하지 않아 직관적이지 못함 따라서 select로 변경함 -->
+	                    <select id="combo-box_sortingType" class="input-large form-control">
+		                    <option class="ratebtn" id="volume_24h_sorting" value="Volume_24h" selected="selected"> 24시간거래량순 </option>
+		                    <option class="ratebtn" id="label_sorting" value="Label"> 라벨순 </option>
+		                    <option class="ratebtn" id="name_sorting" value="Name"> 이름순 </option>
+		                    <option class="ratebtn" id="price_sorting" value="Price"> 높은시세순</option>
+	                	</select>
+					</li>
+					<!-- 실화폐 환율 -->							
+					<li id="drop-box_moneyType">
+						<!-- dropdown은 목록 선택시 뷰에 보여지는 목록이 변하지 않아 직관적이지 못함 따라서 select로 변경함 -->
+	                    <select id="combo-box_moneyType" class="input-large form-control">
+		                    <option class="ratebtn" id="PRICE_USD" value="PRICE_USD" selected="selected"> USD </option>
+		                    <option class="ratebtn" id="PRICE_CNY" value="PRICE_CNY"> CNY </option>
+		                    <option class="ratebtn" id="PRICE_EUR" value="PRICE_EUR"> EUR </option>
+		                    <option class="ratebtn" id="PRICE_GBP" value="PRICE_GBP"> GBP </option>
+		                    <option class="ratebtn" id="PRICE_RUR" value="PRICE_RUR"> RUR </option>
+		                    <option class="ratebtn" id="PRICE_BTC" value="PRICE_BTC"> BTC </option>
+	                	</select>
+					</li>
+					
+				</ul>
+				
 				<div class="tab-content">
 					<!-- 첫 탭 화면에 표시되는 정보 (비트코인 환율) -->
 					<div id="bitcoin_price" class="tab-pane fade in active">
-					
-						<table id="marketPriceList">
-							<tr>
-								<th>Label</th>
-								<th>Name</th>
-								<th>Price</th>
-								<th>Volume_24h</th>
-							</tr>
+
+						<table id="marketPriceList" class="table table-hover" cellspacing="0">
+							<!-- <table id="example" class="display" cellspacing="0" width="100%"> -->
+							<thead>
+								<tr class="label_bar">
+									<th id="label_th">라벨</th>
+									<th id="name_th">이름</th>
+									<th id="price_th">시세</th>
+									<th id="price_volume_24h">24시간거래량</th>
+								</tr>
+							</thead>
+							
 							<tbody id="bitrate">
 
 							</tbody>
 
 						</table>
 					</div>
-					
+
 					<!-- 두번째 탭 화면에서 보여주는 정보 (실화폐환율) -->
-					<div id="market_price" class="tab-pane fade">
-					<table>
-					<tr>
-						<th>Id</th>
-						<th>Name</th>
-						<th>Rate</th>
-						<th>Ask</th>
-						<th>Bid</th>
-
-					</tr>
-					<tbody id="rate">
-
-					</tbody>
+					<div id="market_price">
+					<table id="exchange" class="table table-hover">
+						<thead>
+							<tr class="label_bar">
+								<th>환율ID</th>
+								<th>환율기준</th>
+								<th>시세</th>
+								<th>매도</th>
+								<th>매수</th>
+							</tr>
+						</thead>
+						<tbody id="rate">
+	
+						</tbody>
 					</table>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+<<<<<<< HEAD
 			
 	<!-- 실시간 시세보기 -->
 	<script>
@@ -187,5 +208,9 @@
 			});	
 		});
 	</script>
+=======
+	
+<%@ include file="../../include/chatting.jsp" %>
+>>>>>>> 3f0c07590edbe5089b813dcf39679cd651a0e980
 	
 </body>

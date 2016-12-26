@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -187,32 +188,64 @@ public class NewsController {
 		
 	}
 	
+	//국내기사 스크랩
+		@ResponseBody
+		@RequestMapping(value = "/addDemesticScrap", method = RequestMethod.POST)
+		public String addDemesticScrap(@RequestBody DemesticScrap vo) throws Exception{
+			String result = "false";
+			int userNum = demService.getUserNumber(vo.getEmail());
+			vo.setUser_num(userNum);
+			vo.setKeyword("비트코인");
+			String scrapTF = demService.demScrapCheck(vo);
+			System.out.println(scrapTF);
+			if(scrapTF != null)
+			{
+				demService.removeDemesticScrap(vo);
+				result = "false";
+			}
+			else
+			{
+				demService.addDemesticScrap(vo);
+				result = "true";
+			}
+			
+			
+			
+			return result;
+		}
+	
 	//해외기사 스크랩
+	@ResponseBody
 	@RequestMapping(value = "/addAbroadScrap", method = RequestMethod.POST)
 	public String addAbroadScrap(@RequestBody AbroadScrap vo) throws Exception{
-		vo.setUser_num(4);
-		abrService.addAbroadScrap(vo);
+		String result = "false";
 		
-		return "sub/news/news/tab2";
+		int userNum = demService.getUserNumber(vo.getEmail());
+		vo.setUser_num(userNum);
+		String scrapTF = abrService.abrScrapCheck(vo);
+		
+		if(scrapTF != null)
+		{
+			abrService.removeAbroadScrap(vo);
+			result = "false";
+		}
+		else
+		{
+			abrService.addAbroadScrap(vo);
+			result = "true";
+		}
+		
+		return result;
 	}
 	
-	//국내기사 스크랩
-	@RequestMapping(value = "/addDemesticScrap", method = RequestMethod.POST)
-	public String addDemesticScrap(@RequestBody DemesticScrap vo) throws Exception{
-		vo.setUser_num(4);
-		demService.addDemesticScrap(vo);
-		
-		return "sub/news/news/tab1";
-	}
 	
-	//국내기사 스크랩
+	
+	//구독신청
 	@ResponseBody
 	@RequestMapping(value = "/getEmail", method = RequestMethod.POST)
-	public String getEmail(@RequestBody String email, Model model) throws Exception{
+	public String getEmail(@RequestBody String email) throws Exception{
 		String email2 = email.replace("\"", "");
 		emailService.addEmail(email2);
-		int page = 1;
-		model.addAttribute("page", page);
-		return "sub/news/tab1";
+		return "true";
 	}
 }
