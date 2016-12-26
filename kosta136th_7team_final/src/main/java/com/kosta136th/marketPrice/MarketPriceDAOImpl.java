@@ -10,14 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MarketPriceDAOImpl implements MarketPriceDAO{
 
-<<<<<<< HEAD
-	
-	
-	@Override
-	public void rateSave(MarketPrice marketPrice) throws Exception {
-		
-		
-=======
 	@Inject
 	private SqlSession sqlSession;
 	
@@ -42,7 +34,6 @@ public class MarketPriceDAOImpl implements MarketPriceDAO{
 	public List<MarketPrice> coinRateList() throws Exception {
 		
 		return sqlSession.selectList(namespace + ".bitcoinList");
->>>>>>> 68931bff15b818f1830116c0a776d19068dfc30a
 		
 	}
 

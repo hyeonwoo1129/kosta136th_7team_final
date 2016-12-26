@@ -103,7 +103,7 @@
 			$.getJSON(url,  function (data) {
 				var str = "";
                  $.each(data.reverse(), function(){
-                    	str += "<tr>"
+                    	str += "<tr class="'"onclick"'">"
 	                    str += "<td>" + this.label + "</td>";
 	                    str += "<td>" + this.name + "</td>";
 	                    str += "<td>" + this.price + "</td>";
